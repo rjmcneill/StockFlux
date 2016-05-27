@@ -12,25 +12,21 @@ fin.desktop.main(() => {
         'childConnected',
         { uuid: window.name }
     );
-    // window.opener.dispatchEvent(new CustomEvent('childConnected', {
-    //     detail: {
-    //         uuid: window.name
-    //     }
-    // }));
 
     fin.desktop.InterApplicationBus.subscribe(
         '*',
         'initState',
         message => {
-            const { state, uuid } = message;
+            const { state, uuid, id } = message;
             console.log('initState: ' + uuid);
             if (uuid === window.name) {
                 const store = configureStore(state);
 
                 store.subscribe(() => {
+                    console.log('yo');
                     fin.desktop.InterApplicationBus.publish(
                         'childUpdated',
-                        { state: store.getState(), uuid }
+                        { state: store.getState(), id }
                     );
                 });
 

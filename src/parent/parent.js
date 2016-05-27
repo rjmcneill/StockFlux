@@ -4,10 +4,13 @@ import configureStore from '../child/store/configureStore';
 import { childChange, childConnect } from './actions';
 import 'babel-polyfill';
 
-function createChildWindows() {
-    const store = parentStore({ childWindows: [], childStates: [configureStore().getState()] });
+let id = 0;
+const getId = () => id++;
 
-    store.getState().childStates.forEach((childState) => {
+function createChildWindows() {
+    const store = parentStore([{ id, state: configureStore().getState() }]);
+
+    store.getState().forEach((childState) => {
         const childWindow = new fin.desktop.Window(
             configService.getWindowConfig(),
             () => childWindow.show()
@@ -24,33 +27,22 @@ function createChildWindows() {
             '*',
             'childConnected',
             message => {
-                store.dispatch(childConnect(message.uuid));
+                const newId = getId();
+                store.dispatch(childConnect(newId));
                 console.log('child connected: ' + message.uuid);
                 fin.desktop.InterApplicationBus.publish(
                     'initState',
-                    { state: childState, uuid: message.uuid }
+                    { state: childState, uuid: message.uuid, id: newId }
                 );
             }
         );
-
-        // window.addEventListener('childConnected', () => {
-        //     store.dispatch(childConnect(event.detail.uuid));
-        //     console.log('child connected');
-        //     childWindow.contentWindow.dispatchEvent(new CustomEvent('initState', {
-        //         detail: {
-        //             state: childStore.getState(),
-        //             uuid: childWindow.name
-        //         }
-        //     }));
-        // });
-
 
         fin.desktop.InterApplicationBus.subscribe(
             '*',
             'childUpdated',
             message => {
                 console.log(message);
-                store.dispatch(childChange(message.state, message.uuid));
+                store.dispatch(childChange(message.state, message.id));
             }
         );
 

@@ -2,21 +2,17 @@
 import { CHILD_CHANGE, CHILD_CONNECT } from './actions';
 import configureStore from '../child/store/configureStore';
 
-function children(state = { childWindows: [], childStates: {} }, action) {
+function children(state = [], action) {
+    const newState = [...state];
     switch (action.type) {
     case CHILD_CONNECT:
-        return Object.assign({}, state, {
-            childWindows: [...state.childWindows, action.uuid],
-            childStates: Object.assign({}, state.childStates, {
-                [action.uuid]: configureStore().getState()
-            })
-        });
+        if (newState.some(currentState => currentState.id === action.id)) {
+            return state;
+        }
+        return [...state, { id: action.id, state: action.state }];
     case CHILD_CHANGE:
-        return Object.assign({}, state, {
-            childStates: Object.assign({}, state.childStates, {
-                [action.uuid]: action.state
-            })
-        });
+        newState.find(currentState => currentState.id === action.id).state = action.state;
+        return newState;
     default:
         return state;
     }
