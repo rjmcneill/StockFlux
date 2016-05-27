@@ -9,7 +9,6 @@ import {
 } from '../../actions/window.js';
 import icon from '../../assets/png/scottlogic_logo.png';
 
-
 class Toolbar extends Component {
     constructor(props) {
         super(props);

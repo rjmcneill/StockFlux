@@ -1,4 +1,5 @@
 import configService from '../shared/ConfigService';
+import initReducers from './reducers.js';
 
 function createMainWindow() {
 
@@ -13,6 +14,7 @@ function createMainWindow() {
     };
 
     mainWindow.addEventListener('closed', closedEvent);
+    initReducers();
 }
 
 fin.desktop.main(() => createMainWindow());

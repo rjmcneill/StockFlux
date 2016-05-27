@@ -1,6 +1,7 @@
 import { SIDEBAR as ACTION_TYPES } from '../constants/actionTypes.js';
 
 import QuandlService from '../services/QuandlService.js';
+import { notifyParent } from '../services/notifyParent.js';
 const quandlService = new QuandlService();
 
 export function searchInput(term) {
@@ -11,24 +12,30 @@ export function searchInput(term) {
 }
 
 export function selectStock(code, name) {
-    return {
+    const action = {
         type: ACTION_TYPES.SELECTION,
         code,
         name
     };
+    notifyParent(action);
+    return action;
 }
 
 export function unselectStock() {
-    return {
+    const action = {
         type: ACTION_TYPES.UNSELECT
     };
+    notifyParent(action);
+    return action;
 }
 
 export function toggleFavourite(code) {
-    return {
+    const action = {
         type: ACTION_TYPES.TOGGLE_FAVOURITE,
         code
     };
+    notifyParent(action);
+    return action;
 }
 
 export function clearSearch() {
@@ -59,23 +66,29 @@ export function searchError() {
 }
 
 export function selectSearch() {
-    return {
+    const action = {
         type: ACTION_TYPES.SEARCH_CLICKED
     };
+    notifyParent(action);
+    return action;
 }
 
 export function selectFavourites() {
-    return {
+    const action = {
         type: ACTION_TYPES.FAV_CLICKED
     };
+    notifyParent(action);
+    return action;
 }
 
 export function quandlResponse(code, name) {
-    return {
+    const action = {
         type: ACTION_TYPES.QUANDL_RESPONSE,
         code,
         name
     };
+    notifyParent(action);
+    return action;
 }
 
 export function search(term) {
