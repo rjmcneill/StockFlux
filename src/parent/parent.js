@@ -5,9 +5,9 @@ import { childChange, childConnect } from './actions';
 import 'babel-polyfill';
 
 function createChildWindows() {
-    const store = parentStore({ childWindows: [], childStores: [configureStore()] });
+    const store = parentStore({ childWindows: [], childStates: [configureStore().getState()] });
 
-    store.getState().childStores.forEach((childStore) => {
+    store.getState().childStates.forEach((childState) => {
         const childWindow = new fin.desktop.Window(
             configService.getWindowConfig(),
             () => childWindow.show()
@@ -28,10 +28,11 @@ function createChildWindows() {
                 console.log('child connected: ' + message.uuid);
                 fin.desktop.InterApplicationBus.publish(
                     'initState',
-                    { state: childStore.getState(), uuid: message.uuid }
+                    { state: childState, uuid: message.uuid }
                 );
             }
         );
+
         // window.addEventListener('childConnected', () => {
         //     store.dispatch(childConnect(event.detail.uuid));
         //     console.log('child connected');
@@ -48,8 +49,8 @@ function createChildWindows() {
             '*',
             'childUpdated',
             message => {
-                console.log('updated uuid: ' + message.uuid);
-                store.dispatch(childChange(message.state, message.index));
+                console.log(message);
+                store.dispatch(childChange(message.state, message.uuid));
             }
         );
 

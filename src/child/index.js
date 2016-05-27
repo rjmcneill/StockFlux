@@ -8,8 +8,6 @@ import configureStore from './store/configureStore';
 import './assets/styles/style.less';
 
 fin.desktop.main(() => {
-    let store;
-
     fin.desktop.InterApplicationBus.publish(
         'childConnected',
         { uuid: window.name }
@@ -24,14 +22,15 @@ fin.desktop.main(() => {
         '*',
         'initState',
         message => {
-            console.log('initState: ' + message.uuid);
-            if (message.uuid === window.name) {
-                store = configureStore(message.state);
+            const { state, uuid } = message;
+            console.log('initState: ' + uuid);
+            if (uuid === window.name) {
+                const store = configureStore(state);
 
                 store.subscribe(() => {
                     fin.desktop.InterApplicationBus.publish(
                         'childUpdated',
-                        { store, uuid: window.name }
+                        { state: store.getState(), uuid }
                     );
                 });
 
