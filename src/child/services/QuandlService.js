@@ -122,6 +122,7 @@ class QuandlService {
         .then(response => response.json())
         .then(json => {
             if (isValidResponse(json)) {
+                console.log(json);
                 processResponse(json);
                 callback(json);
             } else {

@@ -15,6 +15,7 @@ fin.desktop.main(() => {
             const { state, uuid, id } = message;
             if (uuid === window.name) {
                 const store = configureStore(state.state);
+                window.id = id;
 
                 store.subscribe(() => {
                     fin.desktop.InterApplicationBus.publish(
