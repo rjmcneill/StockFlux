@@ -7,47 +7,57 @@ import 'babel-polyfill';
 let id = 0;
 const getId = () => id++;
 
+// Need to increment on drag out also
+let openWindows = 0;
+
 function createChildWindows() {
     const store = parentStore([{ id, state: configureStore().getState() }]);
 
-    store.getState().forEach((childState) => {
+    const closedEvent = () => {
+        openWindows--;
+        if (openWindows === 0) {
+            // Close the application
+            window.close();
+        }
+    };
+
+    fin.desktop.InterApplicationBus.subscribe(
+        '*',
+        'childConnected',
+        message => {
+            const newId = getId();
+            store.dispatch(childConnect(newId));
+            const childState = store.getState().find(state => state.id === newId);
+            fin.desktop.InterApplicationBus.publish(
+                'initState',
+                { state: childState, uuid: message.uuid, id: newId }
+            );
+        }
+    );
+
+    fin.desktop.InterApplicationBus.subscribe(
+        '*',
+        'childUpdated',
+        message => {
+            store.dispatch(childChange(message.state, message.id));
+        }
+    );
+
+    store.getState().forEach(childState => {
         const childWindow = new fin.desktop.Window(
             configService.getWindowConfig(),
             () => childWindow.show()
         );
 
-        const closedEvent = () => {
-            // Close the application
-            window.close();
-        };
+        openWindows++;
 
         childWindow.addEventListener('closed', closedEvent);
-
-        fin.desktop.InterApplicationBus.subscribe(
-            '*',
-            'childConnected',
-            message => {
-                const newId = getId();
-                store.dispatch(childConnect(newId));
-                console.log('child connected: ' + message.uuid);
-                fin.desktop.InterApplicationBus.publish(
-                    'initState',
-                    { state: childState, uuid: message.uuid, id: newId }
-                );
-            }
-        );
-
-        fin.desktop.InterApplicationBus.subscribe(
-            '*',
-            'childUpdated',
-            message => {
-                console.log(message);
-                store.dispatch(childChange(message.state, message.id));
-            }
-        );
-
-
     });
+
+    // const childWindow = new fin.desktop.Window(
+    //     configService.getWindowConfig(),
+    //     () => childWindow.show()
+    // );
 }
 
 fin.desktop.main(() => createChildWindows());
