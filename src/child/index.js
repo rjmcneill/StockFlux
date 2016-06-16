@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import App from './containers/App';
 import 'babel-polyfill';
 import configureStore from './store/configureStore';
+import { notifyParent } from './services/notifyParent.js';
 
 import './assets/styles/style.less';
 

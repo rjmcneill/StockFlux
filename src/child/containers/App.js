@@ -6,7 +6,6 @@ import Showcase from './showcase/Showcase';
 import Version from '../components/version/Version';
 import { truncate } from '../services/formatters';
 
-
 import DevTools from './devTools/DevTools.js';
 import '../../../node_modules/d3fc/dist/d3fc.min.css';
 import '../../../node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css';
@@ -17,6 +16,8 @@ require('script!../../../node_modules/moment/moment.js');
 require('script!../../../node_modules/BitFlux/node_modules/bootstrap/js/dropdown.js');
 require('script!../../../node_modules/d3fc/dist/d3fc.bundle.min.js');
 require('script!../../../node_modules/BitFlux/dist/bitflux.js');
+
+let unconfirmedHBs = 1;
 
 const App = ({ code, name }) => (
     <div className="main">
@@ -35,6 +36,21 @@ const App = ({ code, name }) => (
         <DevTools />
     </div>
 );
+
+function sendHeartbeat() {
+    window.opener.dispatchEvent(new CustomEvent('childHB'));
+    unconfirmedHBs++;
+    console.log('Sent child heartbeat. Unconfirmed:', unconfirmedHBs);
+}
+
+window.opener.addEventListener('parentHB', () => {
+    unconfirmedHBs--;
+    console.log('Received parent response. Unconfirmed:', unconfirmedHBs);
+});
+
+setInterval(() => {
+    sendHeartbeat();
+}, 1000);
 
 App.propTypes = {
     code: PropTypes.string,
