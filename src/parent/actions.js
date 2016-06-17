@@ -28,3 +28,9 @@ export function childClosed(id) {
         id
     };
 }
+
+export function dummy() {
+    return {
+        type: 'TEST'
+    };
+}

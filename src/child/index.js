@@ -34,6 +34,14 @@ fin.desktop.main(() => {
         }
     );
 
+    fin.desktop.InterApplicationBus.subscribe(
+        '*',
+        'change',
+        message => {
+            console.log('Parent store updated');
+        }
+    );
+
     fin.desktop.InterApplicationBus.publish(
         'childConnected',
         { uuid: window.name }
