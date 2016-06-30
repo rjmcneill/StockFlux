@@ -8,10 +8,13 @@ import { SIDEBAR as ACTION_TYPES } from '../../../../src/child/constants/actionT
 import { apiKey } from '../../../../src/child/services/QuandlService';
 import createFakeQuandlServer from '../../../helper/fakeQuandlServer';
 
+global.window = { windowId: 0 };
+
 describe('child/actions/sidebar', () => {
     it('should create an action to input a stock to search for', () => {
         const term = 'GOOG';
         const expectedAction = {
+            windowId: 0,
             type: ACTION_TYPES.SEARCH_INPUT,
             term
         };
@@ -22,6 +25,7 @@ describe('child/actions/sidebar', () => {
         const code = 'GOOG';
         const name = 'Alphabet Inc (GOOG) Prices, Dividends, Splits and Trading Volume';
         const expectedAction = {
+            windowId: 0,
             type: ACTION_TYPES.SELECTION,
             code,
             name
@@ -30,7 +34,7 @@ describe('child/actions/sidebar', () => {
     });
 
     it('should create an action to unselect a stock', () => {
-        const expectedAction = { type: ACTION_TYPES.UNSELECT };
+        const expectedAction = { windowId: 0, type: ACTION_TYPES.UNSELECT };
         expect(actions.unselectStock()).to.deep.equal(expectedAction);
     });
 
@@ -38,6 +42,7 @@ describe('child/actions/sidebar', () => {
         const index = 1;
         const code = 'GOOG';
         const expectedAction = {
+            windowId: 0,
             type: ACTION_TYPES.INSERT_FAVOURITE_AT,
             index,
             code
@@ -48,6 +53,7 @@ describe('child/actions/sidebar', () => {
     it('should create an action to toggle a favourite', () => {
         const code = 'GOOG';
         const expectedAction = {
+            windowId: 0,
             type: ACTION_TYPES.TOGGLE_FAVOURITE,
             code
         };
@@ -55,12 +61,12 @@ describe('child/actions/sidebar', () => {
     });
 
     it('should create an action to select search', () => {
-        const expectedAction = { type: ACTION_TYPES.SEARCH_CLICKED };
+        const expectedAction = { windowId: 0, type: ACTION_TYPES.SEARCH_CLICKED };
         expect(actions.selectSearch()).to.deep.equal(expectedAction);
     });
 
     it('should create an action to select favourites', () => {
-        const expectedAction = { type: ACTION_TYPES.FAV_CLICKED };
+        const expectedAction = { windowId: 0, type: ACTION_TYPES.FAV_CLICKED };
         expect(actions.selectFavourites()).to.deep.equal(expectedAction);
     });
 
@@ -68,6 +74,7 @@ describe('child/actions/sidebar', () => {
         const code = 'GOOG';
         const name = 'Alphabet Inc (GOOG) Prices, Dividends, Splits and Trading Volume';
         const expectedAction = {
+            windowId: 0,
             type: ACTION_TYPES.QUANDL_RESPONSE,
             code,
             name
@@ -91,7 +98,7 @@ describe('child/actions/sidebar', () => {
 
         it('should create an action to clear a search', () => {
             const term = '';
-            const expectedActions = [{ type: ACTION_TYPES.CLEAR_SEARCH }];
+            const expectedActions = [{ windowId: 0, type: ACTION_TYPES.CLEAR_SEARCH }];
 
             const store = mockStore();
 
@@ -113,8 +120,8 @@ describe('child/actions/sidebar', () => {
             };
             const results = [result1, result2];
             const expectedActions = [
-                { type: ACTION_TYPES.SEARCH_STARTED, term },
-                { type: ACTION_TYPES.SEARCH_FINISHED, term, results }
+                { windowId: 0, type: ACTION_TYPES.SEARCH_STARTED, term },
+                { windowId: 0, type: ACTION_TYPES.SEARCH_FINISHED, term, results }
             ];
 
             const store = mockStore();
@@ -128,8 +135,8 @@ describe('child/actions/sidebar', () => {
         it('should create an action to error a search', () => {
             const term = 'BAD';
             const expectedActions = [
-                { type: ACTION_TYPES.SEARCH_STARTED, term },
-                { type: ACTION_TYPES.SEARCH_ERROR }
+                { windowId: 0, type: ACTION_TYPES.SEARCH_STARTED, term },
+                { windowId: 0, type: ACTION_TYPES.SEARCH_ERROR }
             ];
 
             const store = mockStore();
