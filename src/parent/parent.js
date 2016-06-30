@@ -57,6 +57,15 @@ function createChildWindows() {
 
         childWindow.addEventListener('closed', closedEvent);
     });
+
+    const childWindow = new fin.desktop.Window(
+        configService.getWindowConfig(),
+        () => childWindow.show()
+    );
+
+    openWindows++;
+
+    childWindow.addEventListener('closed', closedEvent);
 }
 
 fin.desktop.main(() => createChildWindows());

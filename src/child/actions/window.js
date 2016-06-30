@@ -51,6 +51,13 @@ export function restore() {
     };
 }
 
+export function open() {
+    return {
+        windowId: window.windowId,
+        type: ACTION_TYPES.OPEN
+    };
+}
+
 export function close() {
     return {
         windowId: window.windowId,
@@ -89,10 +96,5 @@ export function resizeToDefault() {
             () => dispatch(expand()),
             () => dispatch(resizeError())
         );
-
-export function open() {
-    return {
-        windowId: window.windowId,
-        type: ACTION_TYPES.OPEN
     };
 }
