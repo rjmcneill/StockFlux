@@ -2,7 +2,11 @@ import { expect } from 'chai';
 import * as actions from '../../../../src/child/actions/window';
 import { WINDOW as ACTION_TYPES } from '../../../../src/child/constants/actionTypes.js';
 
-global.window = { windowId: 0 };
+function getCurrent() {
+    return { contentWindow: { windowId: 0 } };
+}
+
+global.fin = { desktop: { Window: { getCurrent } } };
 
 describe('child/actions/window', () => {
     it('should create an action for minimize', () => {
@@ -49,7 +53,7 @@ describe('child/actions/window', () => {
     });
 
     it('should create an action for resizing', () => {
-        const expectedAction = { type: ACTION_TYPES.RESIZING };
+        const expectedAction = { windowId: 0, type: ACTION_TYPES.RESIZING };
         expect(actions.resizing()).to.deep.equal(expectedAction);
     });
 });

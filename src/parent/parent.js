@@ -16,7 +16,7 @@ function createChildWindows() {
         openWindows--;
         // Close the application
         if (openWindows === 0) {
-            window.close();
+            fin.desktop.Window.getCurrent().contentWindow.close();
         }
     };
 
@@ -57,15 +57,6 @@ function createChildWindows() {
 
         childWindow.addEventListener('closed', closedEvent);
     });
-
-    const childWindow = new fin.desktop.Window(
-        configService.getWindowConfig(),
-        () => childWindow.show()
-    );
-
-    openWindows++;
-
-    childWindow.addEventListener('closed', closedEvent);
 }
 
 fin.desktop.main(() => createChildWindows());

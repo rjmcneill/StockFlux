@@ -55,9 +55,9 @@ class Toolbar extends Component {
     onCloseClick() {
         fin.desktop.InterApplicationBus.publish(
             'childClosing',
-            { windowId: window.windowId }
+            { windowId: fin.desktop.Window.getCurrent().contentWindow.windowId }
         );
-        window.close();
+        fin.desktop.Window.getCurrent().contentWindow.close();
     }
 
     onMinimize() {

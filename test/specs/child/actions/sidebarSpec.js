@@ -8,7 +8,11 @@ import { SIDEBAR as ACTION_TYPES } from '../../../../src/child/constants/actionT
 import { apiKey } from '../../../../src/child/services/QuandlService';
 import createFakeQuandlServer from '../../../helper/fakeQuandlServer';
 
-global.window = { windowId: 0 };
+function getCurrent() {
+    return { contentWindow: { windowId: 0 } };
+}
+
+global.fin = { desktop: { Window: { getCurrent } } };
 
 describe('child/actions/sidebar', () => {
     it('should create an action to input a stock to search for', () => {

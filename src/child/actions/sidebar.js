@@ -4,7 +4,7 @@ import { search as quandlServiceSearch } from '../services/QuandlService.js';
 
 export function searchInput(term) {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.SEARCH_INPUT,
         term
     };
@@ -12,7 +12,7 @@ export function searchInput(term) {
 
 export function selectStock(code, name) {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.SELECTION,
         code,
         name
@@ -21,14 +21,14 @@ export function selectStock(code, name) {
 
 export function unselectStock() {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.UNSELECT
     };
 }
 
 export function insertFavouriteAt(index, code) {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.INSERT_FAVOURITE_AT,
         index,
         code
@@ -37,7 +37,7 @@ export function insertFavouriteAt(index, code) {
 
 export function toggleFavourite(code) {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.TOGGLE_FAVOURITE,
         code
     };
@@ -45,21 +45,21 @@ export function toggleFavourite(code) {
 
 export function selectSearch() {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.SEARCH_CLICKED
     };
 }
 
 export function selectFavourites() {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.FAV_CLICKED
     };
 }
 
 export function quandlResponse(code, name) {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.QUANDL_RESPONSE,
         code,
         name
@@ -68,14 +68,14 @@ export function quandlResponse(code, name) {
 
 function clearSearch() {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.CLEAR_SEARCH
     };
 }
 
 function searchStarted(term) {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.SEARCH_STARTED,
         term
     };
@@ -83,7 +83,7 @@ function searchStarted(term) {
 
 function searchFinished(term, results) {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.SEARCH_FINISHED,
         term,
         results
@@ -92,7 +92,7 @@ function searchFinished(term, results) {
 
 function searchError() {
     return {
-        windowId: window.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
         type: ACTION_TYPES.SEARCH_ERROR
     };
 }
