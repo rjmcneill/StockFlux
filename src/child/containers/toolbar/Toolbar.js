@@ -53,12 +53,10 @@ class Toolbar extends Component {
     }
 
     onCloseClick() {
-        // notifyParent(WINDOW_CLOSE, {
-        //     name: window.name,
-        //     state: this.props.windowState
-        // });
-        // this.props.dispatch(close());
-        // console.log('    state', this)
+        fin.desktop.InterApplicationBus.publish(
+            'childClosing',
+            { windowId: window.windowId }
+        );
         window.close();
     }
 
@@ -102,7 +100,7 @@ Toolbar.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { windowState } = state;
+    const { windowState } = state[fin.desktop.Window.getCurrent().contentWindow.windowId];
     return { windowState };
 }
 

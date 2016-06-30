@@ -3,12 +3,14 @@ import configService from '../../shared/ConfigService';
 
 export function minimise() {
     return {
+        windowId: window.windowId,
         type: ACTION_TYPES.MINIMIZE
     };
 }
 
 export function compact() {
     return {
+        windowId: window.windowId,
         type: ACTION_TYPES.TOGGLE_COMPACT,
         state: true
     };
@@ -16,6 +18,7 @@ export function compact() {
 
 export function expand() {
     return {
+        windowId: window.windowId,
         type: ACTION_TYPES.TOGGLE_COMPACT,
         state: false
     };
@@ -29,27 +32,32 @@ export function resizing() {
 
 export function fullView() {
     return {
+        windowId: window.windowId,
         type: ACTION_TYPES.STATE_FULL_VIEW
     };
 }
 
 export function maximize() {
     return {
+        windowId: window.windowId,
         type: ACTION_TYPES.MAXIMIZE
     };
 }
 
 export function restore() {
     return {
+        windowId: window.windowId,
         type: ACTION_TYPES.RESTORE
     };
 }
 
 export function close() {
     return {
+        windowId: window.windowId,
         type: ACTION_TYPES.CLOSE
     };
 }
+
 
 export function resizeError() {
     return {
@@ -82,5 +90,10 @@ export function resizeToDefault() {
             () => dispatch(expand()),
             () => dispatch(resizeError())
         );
+
+export function open(windowId) {
+    return {
+        windowId: window.windowId,
+        type: ACTION_TYPES.OPEN
     };
 }

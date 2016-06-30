@@ -1,9 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { render } from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
 import App from './containers/App';
 import 'babel-polyfill';
 import configureStore from './store/configureStore';
+
+import { open } from './actions/window';
 
 import './assets/styles/style.less';
 import '../../node_modules/d3fc/dist/d3fc.min.css';
@@ -18,11 +20,33 @@ require('script!../../node_modules/d3fc/dist/d3fc.bundle.min.js');
 require('script!../../node_modules/BitFlux/dist/bitflux.js');
 /* eslint-enable import/no-unresolved */
 
-const store = configureStore();
+fin.desktop.main(() => {
+    window.addEventListener('beforeunload', () => {
+        unmountComponentAtNode(document.getElementById('app'))
+    });
 
-render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById('app')
-);
+    fin.desktop.InterApplicationBus.subscribe(
+        '*',
+        'childId',
+        message => {
+            if (message.uuid === fin.desktop.Window.getCurrent().contentWindow.name) {
+                fin.desktop.Window.getCurrent().contentWindow.windowId = message.windowId;
+
+                const store = fin.desktop.Window.getCurrent().contentWindow.opener.store;
+                store.dispatch(open());
+
+                render(
+                    <Provider store={store}>
+                        <App />
+                    </Provider>,
+                    document.getElementById('app')
+                );
+            }
+        }
+    );
+
+    fin.desktop.InterApplicationBus.publish(
+        'childConnected',
+        { uuid: fin.desktop.Window.getCurrent().contentWindow.name }
+    );
+});

@@ -34,7 +34,7 @@ App.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { selection, windowState } = state;
+    const { selection, windowState } = state[fin.desktop.Window.getCurrent().contentWindow.windowId];
     const { name, code } = selection;
     return { name, code, windowState };
 }

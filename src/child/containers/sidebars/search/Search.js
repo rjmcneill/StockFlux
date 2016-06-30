@@ -119,8 +119,12 @@ Search.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { favourites, selection } = state;
-    const { isSearching, hasErrors, results, term } = state && state.search;
+    console.log(fin.desktop.Window.getCurrent().contentWindow.name);
+    if (!state.search || !state.favourites) {
+        console.log('SEARCH', Object.assign({}, state));
+    }
+    const { favourites, selection } = state[fin.desktop.Window.getCurrent().contentWindow.windowId];
+    const { isSearching, hasErrors, results, term } = state[fin.desktop.Window.getCurrent().contentWindow.windowId] && state[fin.desktop.Window.getCurrent().contentWindow.windowId].search;
     return { favourites, isSearching, hasErrors, results, term, selection };
 }
 
