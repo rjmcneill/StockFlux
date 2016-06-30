@@ -7,21 +7,6 @@ export function initialiseState() {
     };
 }
 
-// export function childConnect(id) {
-//     return {
-//         type: ACTION_TYPES.CHILD_CONNECT,
-//         id
-//     };
-// }
-
-// export function childChange(state, id) {
-//     return {
-//         type: ACTION_TYPES.CHILD_CHANGE,
-//         state,
-//         id
-//     };
-// }
-
 export function childClosed(windowId) {
     return {
         type: ACTION_TYPES.CHILD_CLOSED,

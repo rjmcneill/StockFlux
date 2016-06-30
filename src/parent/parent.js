@@ -1,10 +1,7 @@
 import configService from '../shared/ConfigService';
 import parentStore from './parentStore';
-import configureStore from '../child/store/configureStore';
 import { initialiseState, childClosed } from './actions';
 import 'babel-polyfill';
-
-import { open } from '../child/actions/window';
 
 let id = 0;
 const getId = () => id++;
@@ -44,14 +41,13 @@ function createChildWindows() {
         message => {
             // If this isn't the final window, remove it from the store so
             // we don't spawn this window next time
-            console.log('closing');
             if (openWindows !== 1) {
-                store.dispatch(childClosed(message.windowId));
+                fin.desktop.Window.getCurrent().contentWindow.store.dispatch(childClosed(message.windowId));
             }
         }
     );
 
-    for (let childWindow in fin.desktop.Window.getCurrent().contentWindow.store.getState()) {
+    Object.keys(fin.desktop.Window.getCurrent().contentWindow.store.getState()).forEach(() => {
         const childWindow = new fin.desktop.Window(
             configService.getWindowConfig(),
             () => childWindow.show()
@@ -60,16 +56,7 @@ function createChildWindows() {
         openWindows++;
 
         childWindow.addEventListener('closed', closedEvent);
-    }
-
-    const childWindow = new fin.desktop.Window(
-        configService.getWindowConfig(),
-        () => childWindow.show()
-    );
-
-    openWindows++;
-
-    childWindow.addEventListener('closed', closedEvent);
+    });
 }
 
 fin.desktop.main(() => createChildWindows());

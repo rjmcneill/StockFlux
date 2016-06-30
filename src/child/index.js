@@ -3,7 +3,6 @@ import { Provider } from 'react-redux';
 import { render, unmountComponentAtNode } from 'react-dom';
 import App from './containers/App';
 import 'babel-polyfill';
-import configureStore from './store/configureStore';
 
 import { open } from './actions/window';
 
@@ -22,7 +21,7 @@ require('script!../../node_modules/BitFlux/dist/bitflux.js');
 
 fin.desktop.main(() => {
     window.addEventListener('beforeunload', () => {
-        unmountComponentAtNode(document.getElementById('app'))
+        unmountComponentAtNode(document.getElementById('app'));
     });
 
     fin.desktop.InterApplicationBus.subscribe(

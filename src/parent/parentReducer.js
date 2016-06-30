@@ -3,55 +3,55 @@ import childReducer from '../child/reducers/reducers.js';
 
 function parentReducer(state = {}, action) {
 
-    switch(action.type) {
+    switch (action.type) {
 
-        // This action is needed to allow persisting of state
-        // It ensures that the loaded state is assigned to the
-        // new windowIds rather than the previous ids
-        case ACTION_TYPES.INITIALISE_STATE: {
-            let newState = {};
-            const previousState = Object.assign({}, state);
-            let key = 0;
+    // This action is needed to allow persisting of state
+    // It ensures that the loaded state is assigned to the
+    // new windowIds rather than the previous ids
+    case ACTION_TYPES.INITIALISE_STATE: {
+        const newState = {};
+        const previousState = Object.assign({}, state);
+        let key = 0;
 
-            for (let childWindow in state) {
-                newState[key] = previousState[childWindow];
-                key++;
-            }
+        Object.keys(previousState).forEach((previousKey) => {
+            newState[key] = previousState[previousKey];
+            key++;
+        });
 
-            return newState;
+        return newState;
+    }
+
+    case ACTION_TYPES.CHILD_CLOSED: {
+        const newState = Object.assign({}, state);
+        delete newState[action.windowId];
+        return newState;
+    }
+
+    // If it isn't one of the above actions, it an action relating
+    // to the children, let their reducers handle the actions
+    default: {
+        if (action.windowId === null) {
+            return state;
         }
 
-        case ACTION_TYPES.CHILD_CLOSED: {
-            // const previousState = Object.assign({}, state, {
-            //     [action.windowId]: undefined
-            // });
-            // previousState[action.windowId] = undefined;  // This will cause Object.assign to ignore this property
-            const newState = Object.assign({}, state);
-            // console.log('deleting:', action.windowId, newState[action.windowId]);
-            console.log(action.windowId);
-            delete newState[action.windowId];
-            console.log(newState);
-            // return state;
-            return newState;
+        const childState = state[action.windowId];
+        let newState = {};
+
+        if (childState) {
+            newState = Object.assign({}, state, {
+                [action.windowId]: childReducer(childState, action)
+            });
+        } else {
+            newState = Object.assign({}, state, {
+                [action.windowId]: childReducer({}, action)
+            });
         }
+
+        return newState;
     }
 
-    if (action.windowId === null) {
-        return state;
     }
 
-    const childState = state[action.windowId]
-    if (childState) {
-        console.log('CR with state');
-        return Object.assign({}, state, {
-            [action.windowId]: childReducer(childState, action)
-        });
-    } else {
-        console.log('CR without state')
-        return Object.assign({}, state, {
-            [action.windowId]: childReducer({}, action)
-        });
-    }
 }
 
 export default parentReducer;

@@ -58,7 +58,6 @@ export function close() {
     };
 }
 
-
 export function resizeError() {
     return {
         type: ACTION_TYPES.RESIZE_ERROR
@@ -91,7 +90,7 @@ export function resizeToDefault() {
             () => dispatch(resizeError())
         );
 
-export function open(windowId) {
+export function open() {
     return {
         windowId: window.windowId,
         type: ACTION_TYPES.OPEN
