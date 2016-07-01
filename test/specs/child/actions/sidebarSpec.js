@@ -9,7 +9,7 @@ import { apiKey } from '../../../../src/child/services/QuandlService';
 import createFakeQuandlServer from '../../../helper/fakeQuandlServer';
 
 function getCurrent() {
-    return { contentWindow: { windowId: 0 } };
+    return { contentWindow: { name: 0 } };
 }
 
 global.fin = { desktop: { Window: { getCurrent } } };

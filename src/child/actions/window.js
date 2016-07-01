@@ -3,14 +3,14 @@ import configService from '../../shared/ConfigService';
 
 export function minimise() {
     return {
-        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.name,
         type: ACTION_TYPES.MINIMIZE
     };
 }
 
 export function compact() {
     return {
-        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.name,
         type: ACTION_TYPES.TOGGLE_COMPACT,
         state: true
     };
@@ -18,7 +18,7 @@ export function compact() {
 
 export function expand() {
     return {
-        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.name,
         type: ACTION_TYPES.TOGGLE_COMPACT,
         state: false
     };
@@ -26,42 +26,42 @@ export function expand() {
 
 export function resizing() {
     return {
-        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.name,
         type: ACTION_TYPES.RESIZING
     };
 }
 
 export function fullView() {
     return {
-        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.name,
         type: ACTION_TYPES.STATE_FULL_VIEW
     };
 }
 
 export function maximize() {
     return {
-        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.name,
         type: ACTION_TYPES.MAXIMIZE
     };
 }
 
 export function restore() {
     return {
-        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.name,
         type: ACTION_TYPES.RESTORE
     };
 }
 
 export function open() {
     return {
-        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.name,
         type: ACTION_TYPES.OPEN
     };
 }
 
 export function close() {
     return {
-        windowId: fin.desktop.Window.getCurrent().contentWindow.windowId,
+        windowId: fin.desktop.Window.getCurrent().contentWindow.name,
         type: ACTION_TYPES.CLOSE
     };
 }

@@ -180,7 +180,7 @@ Favourites.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { favourites, selection, windowState } = state[fin.desktop.Window.getCurrent().contentWindow.windowId];
+    const { favourites, selection, windowState } = state[fin.desktop.Window.getCurrent().contentWindow.name];
     return { favourites, selection, windowState, isStarting: false, hasErrors: false };
 }
 export default connect(mapStateToProps)(Favourites);

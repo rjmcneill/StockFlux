@@ -3,7 +3,7 @@ import * as actions from '../../../../src/child/actions/window';
 import { WINDOW as ACTION_TYPES } from '../../../../src/child/constants/actionTypes.js';
 
 function getCurrent() {
-    return { contentWindow: { windowId: 0 } };
+    return { contentWindow: { name: 0 } };
 }
 
 global.fin = { desktop: { Window: { getCurrent } } };
