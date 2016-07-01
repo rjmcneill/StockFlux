@@ -1,5 +1,5 @@
-import ACTION_TYPES from './actionTypes.js';
-import childReducers from '../child/reducers/reducers.js';
+import ACTION_TYPES from '../constants/actionTypes.js';
+import childReducers from '../../child/reducers/reducers.js';
 
 function parentReducer(state = {}, action) {
 

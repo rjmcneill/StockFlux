@@ -1,5 +1,5 @@
 import configService from '../shared/ConfigService';
-import parentStore from './parentStore';
+import parentStore from './store/configureStore';
 import 'babel-polyfill';
 
 // Need to increment on drag out also
@@ -34,7 +34,6 @@ function createChildWindows() {
             createChildWindow(newWindowName);
         });
     }
-    createChildWindow();
 }
 
 fin.desktop.main(() => createChildWindows());
