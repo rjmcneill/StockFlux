@@ -7,7 +7,7 @@ function parentReducer(state = {}, action) {
 
     case ACTION_TYPES.CHILD_CLOSED: {
         const newState = Object.assign({}, state);
-        delete newState[action.windowId];
+        delete newState[action.windowName];
         return newState;
     }
     case ACTION_TYPES.INITIALISE_STATE: {
@@ -17,16 +17,16 @@ function parentReducer(state = {}, action) {
     // If it isn't one of the above actions, it an action relating
     // to the children, let their reducers handle the actions
     default: {
-        const childState = state[action.windowId];
+        const childState = state[action.windowName];
         let newState = {};
 
         if (childState) {
             newState = Object.assign({}, state, {
-                [action.windowId]: childReducers(childState, action)
+                [action.windowName]: childReducers(childState, action)
             });
         } else {
             newState = Object.assign({}, state, {
-                [action.windowId]: childReducers({}, action)
+                [action.windowName]: childReducers({}, action)
             });
         }
 

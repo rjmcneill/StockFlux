@@ -3,87 +3,89 @@ import sinon from 'sinon';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import nock from 'nock';
-import * as actions from '../../../../src/child/actions/sidebar';
+import { searchInput, selectStock, unselectStock, insertFavouriteAt,
+         toggleFavourite, selectSearch, selectFavourites, quandlResponse,
+         search, __RewireAPI__ as rewiredActions } from '../../../../src/child/actions/sidebar';
 import { SIDEBAR as ACTION_TYPES } from '../../../../src/child/constants/actionTypes.js';
 import { apiKey } from '../../../../src/child/services/QuandlService';
 import createFakeQuandlServer from '../../../helper/fakeQuandlServer';
 
-function getCurrent() {
-    return { contentWindow: { name: 0 } };
-}
-
-global.fin = { desktop: { Window: { getCurrent } } };
-
 describe('child/actions/sidebar', () => {
+
+    before(() => {
+        const windowNameFunc = () => ({ name: 0 });
+        rewiredActions.__Rewire__('currentWindowService', { getCurrentWindow: windowNameFunc });
+    });
+
     it('should create an action to input a stock to search for', () => {
         const term = 'GOOG';
         const expectedAction = {
-            windowId: 0,
+            windowName: 0,
             type: ACTION_TYPES.SEARCH_INPUT,
             term
         };
-        expect(actions.searchInput(term)).to.deep.equal(expectedAction);
+        expect(searchInput(term)).to.deep.equal(expectedAction);
     });
 
     it('should create an action to select a stock', () => {
         const code = 'GOOG';
         const name = 'Alphabet Inc (GOOG) Prices, Dividends, Splits and Trading Volume';
         const expectedAction = {
-            windowId: 0,
+            windowName: 0,
             type: ACTION_TYPES.SELECTION,
             code,
             name
         };
-        expect(actions.selectStock(code, name)).to.deep.equal(expectedAction);
+        expect(selectStock(code, name)).to.deep.equal(expectedAction);
     });
 
     it('should create an action to unselect a stock', () => {
-        const expectedAction = { windowId: 0, type: ACTION_TYPES.UNSELECT };
-        expect(actions.unselectStock()).to.deep.equal(expectedAction);
+        const expectedAction = { windowName: 0, type: ACTION_TYPES.UNSELECT };
+        expect(unselectStock()).to.deep.equal(expectedAction);
     });
 
     it('should create an action to insert a favourite at a given index', () => {
         const index = 1;
         const code = 'GOOG';
         const expectedAction = {
-            windowId: 0,
+            windowName: 0,
             type: ACTION_TYPES.INSERT_FAVOURITE_AT,
             index,
             code
         };
-        expect(actions.insertFavouriteAt(index, code)).to.deep.equal(expectedAction);
+        expect(insertFavouriteAt(index, code)).to.deep.equal(expectedAction);
     });
 
     it('should create an action to toggle a favourite', () => {
         const code = 'GOOG';
         const expectedAction = {
-            windowId: 0,
+            windowName: 0,
             type: ACTION_TYPES.TOGGLE_FAVOURITE,
             code
         };
-        expect(actions.toggleFavourite(code)).to.deep.equal(expectedAction);
+        expect(toggleFavourite(code)).to.deep.equal(expectedAction);
     });
 
     it('should create an action to select search', () => {
-        const expectedAction = { windowId: 0, type: ACTION_TYPES.SEARCH_CLICKED };
-        expect(actions.selectSearch()).to.deep.equal(expectedAction);
+        const expectedAction = { windowName: 0, type: ACTION_TYPES.SEARCH_CLICKED };
+        expect(selectSearch()).to.deep.equal(expectedAction);
     });
 
     it('should create an action to select favourites', () => {
-        const expectedAction = { windowId: 0, type: ACTION_TYPES.FAV_CLICKED };
-        expect(actions.selectFavourites()).to.deep.equal(expectedAction);
+        const expectedAction = { windowName: 0, type: ACTION_TYPES.FAV_CLICKED };
+        expect(selectFavourites()).to.deep.equal(expectedAction);
     });
 
     it('should create an action for Quandl response', () => {
         const code = 'GOOG';
         const name = 'Alphabet Inc (GOOG) Prices, Dividends, Splits and Trading Volume';
         const expectedAction = {
-            windowId: 0,
+            windowName: 0,
             type: ACTION_TYPES.QUANDL_RESPONSE,
             code,
             name
         };
-        expect(actions.quandlResponse(code, name)).to.deep.equal(expectedAction);
+        expect(quandlResponse(code, name)).to.deep.equal(expectedAction);
     });
 
     describe('search', () => {
@@ -102,11 +104,11 @@ describe('child/actions/sidebar', () => {
 
         it('should create an action to clear a search', () => {
             const term = '';
-            const expectedActions = [{ windowId: 0, type: ACTION_TYPES.CLEAR_SEARCH }];
+            const expectedActions = [{ windowName: 0, type: ACTION_TYPES.CLEAR_SEARCH }];
 
             const store = mockStore();
 
-            return store.dispatch(actions.search(term))
+            return store.dispatch(search(term))
                 .then(() => {
                     expect(store.getActions()).to.deep.equal(expectedActions);
                 });
@@ -124,13 +126,13 @@ describe('child/actions/sidebar', () => {
             };
             const results = [result1, result2];
             const expectedActions = [
-                { windowId: 0, type: ACTION_TYPES.SEARCH_STARTED, term },
-                { windowId: 0, type: ACTION_TYPES.SEARCH_FINISHED, term, results }
+                { windowName: 0, type: ACTION_TYPES.SEARCH_STARTED, term },
+                { windowName: 0, type: ACTION_TYPES.SEARCH_FINISHED, term, results }
             ];
 
             const store = mockStore();
 
-            return store.dispatch(actions.search(term))
+            return store.dispatch(search(term))
                 .then(() => {
                     expect(store.getActions()).to.deep.equal(expectedActions);
                 });
@@ -139,13 +141,13 @@ describe('child/actions/sidebar', () => {
         it('should create an action to error a search', () => {
             const term = 'BAD';
             const expectedActions = [
-                { windowId: 0, type: ACTION_TYPES.SEARCH_STARTED, term },
-                { windowId: 0, type: ACTION_TYPES.SEARCH_ERROR }
+                { windowName: 0, type: ACTION_TYPES.SEARCH_STARTED, term },
+                { windowName: 0, type: ACTION_TYPES.SEARCH_ERROR }
             ];
 
             const store = mockStore();
 
-            return store.dispatch(actions.search(term))
+            return store.dispatch(search(term))
                 .then(() => {
                     expect(store.getActions()).to.deep.equal(expectedActions);
                 });
