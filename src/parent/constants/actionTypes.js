@@ -1,6 +1,8 @@
 const ACTION_TYPES = {
     INITIALISE_STATE: '@@INIT',
-    CHILD_CLOSED: 'CLOSE'
+    CHILD_CLOSED: 'CLOSE',
+    DRAG_START: 'DRAG_START',
+    DRAG_END: 'DRAG_END'
 };
 
 module.exports = ACTION_TYPES;

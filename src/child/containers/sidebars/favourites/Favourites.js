@@ -1,7 +1,7 @@
 /* global $ */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { selectStock, quandlResponse, insertFavouriteAt } from '../../../actions/sidebar';
+import { selectStock, quandlResponse, insertFavouriteAt, dragStart, dragEnd } from '../../../actions/sidebar';
 import { resizeToDefault } from '../../../actions/window';
 import favTabImage from '../../../assets/png/favourites_tab.png';
 import Favourite from '../../../components/Favourite.js';
@@ -33,6 +33,7 @@ class Favourites extends Component {
         this.onDropOverFavourite = this.onDropOverFavourite.bind(this);
         this.onQuandlResponse = this.onQuandlResponse.bind(this);
         this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.onDragStart = this.onDragStart.bind(this);
     }
 
     componentDidMount() {
@@ -66,6 +67,10 @@ class Favourites extends Component {
         }
     }
 
+    onDragStart(e, stockCode) {
+        this.props.dispatch(dragStart(stockCode));
+    }
+
     onDragOverFavourite(e, targetCode) {
         const codes = this.props.favourites.codes;
         const code = getCodeFromDT(e.dataTransfer.types);
@@ -83,6 +88,7 @@ class Favourites extends Component {
         const code = e.dataTransfer.getData('text/plain');
         const currentDropCodeIndex = codes.indexOf(code);
         const targetCodeLocation = codes.indexOf(targetCode);
+        this.props.dispatch(dragEnd());
         this.props.dispatch(insertFavouriteAt(Math.max(0, currentDropCodeIndex > targetCodeLocation ? targetCodeLocation : targetCodeLocation - 1), code));
         e.target.classList.remove('dragOver');
         e.stopPropagation();
@@ -103,6 +109,7 @@ class Favourites extends Component {
         dropTarget.addEventListener('drop', e => {
             const codes = this.props.favourites.codes;
             const code = e.dataTransfer.getData('text/plain');
+            this.props.dispatch(dragEnd());
             this.props.dispatch(insertFavouriteAt(codes.length, code));
             dropTarget.classList.remove('dragOver');
         }, false);
@@ -125,6 +132,7 @@ class Favourites extends Component {
         const codes = favourites.codes;
         let bindings = {
             dnd: {
+                onDragStart: this.onDragStart,
                 onDragEnter: this.onDragOverFavourite,
                 onDrop: this.onDropOverFavourite
             },

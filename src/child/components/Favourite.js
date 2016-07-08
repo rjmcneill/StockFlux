@@ -41,6 +41,8 @@ class Favourite extends Component {
     addDragTarget(stockCode) {
         const dragTarget = document.getElementById(`stock_${stockCode}`);
         dragTarget.addEventListener('dragstart', e => {
+            this.props.bindings.dnd.onDragStart(e, stockCode);
+
             // TODO: fade out window if it's last stock
             dragTarget.classList.add('dragging');
             e.dataTransfer.setData('text/plain', stockCode);
