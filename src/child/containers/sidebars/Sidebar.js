@@ -1,10 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Favourites from './favourites/Favourites.js';
+import ClosedWindows from './closedWindows/ClosedWindows.js';
 import Search from './search/Search.js';
 
-import { selectFavourites, selectSearch, toggleFavourite, selectStock, unselectStock } from '../../actions/sidebar';
+import { selectFavourites, selectSearch, toggleFavourite, selectStock, unselectStock, reopenWindow } from '../../actions/sidebar';
 
+import configService from '../../../shared/ConfigService';
 
 class Sidebar extends Component {
     constructor(props) {
@@ -13,6 +15,7 @@ class Sidebar extends Component {
         this.focusSearch = this.focusSearch.bind(this);
         this.toggleFavourite = this.toggleFavourite.bind(this);
         this.selectStock = this.selectStock.bind(this);
+        this.openWindow = this.openWindow.bind(this);
     }
 
     focusFav() {
@@ -48,12 +51,25 @@ class Sidebar extends Component {
         }
     }
 
+    openWindow() {
+        console.log('hit');
+        // this.props.dispatch(reopenWindow(this.props.unopenedWindows[0]));
+
+        // console.log(this.props.unopenedWindows);
+
+        // const childWindow = new fin.desktop.Window(
+        //     configService.getWindowConfig(this.props.unopenedWindows[0]),
+        //     () => childWindow.show()
+        // );
+    }
+
     render() {
         const { sidebar } = this.props;
 
         let bindings = {
             toggleFavourite: this.toggleFavourite,
-            selectStock: this.selectStock
+            selectStock: this.selectStock,
+            openWindow: this.openWindow
         };
 
         return (
@@ -69,7 +85,7 @@ class Sidebar extends Component {
                 </div>
 
                 <div className="closed-window-selection">
-                    <closed-window-list icon="'closed_tabs'"></closed-window-list>
+                    <ClosedWindows bindings={bindings} />
                 </div>
             </div>
         );
@@ -85,6 +101,7 @@ Sidebar.propTypes = {
 
 function mapStateToProps(state) {
     const { sidebar, selection, favourites, windowState } = state[fin.desktop.Window.getCurrent().contentWindow.name];
-    return { sidebar, selection, favourites, windowState };
+    const unopenedWindows = state.closedWindows ? Object.keys(state.closedWindows) : null;
+    return { sidebar, selection, favourites, windowState, unopenedWindows };
 }
 export default connect(mapStateToProps)(Sidebar);

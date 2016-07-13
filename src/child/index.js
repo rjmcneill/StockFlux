@@ -26,6 +26,7 @@ fin.desktop.main(() => {
     });
 
     const store = fin.desktop.Window.getCurrent().contentWindow.opener.store;
+    window.store = store;
     store.dispatch(open());
 
     render(

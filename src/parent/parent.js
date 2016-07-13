@@ -28,7 +28,7 @@ function createChildWindows() {
 
     if (!Object.keys(fin.desktop.Window.getCurrent().contentWindow.store.getState()).length) {
         createChildWindow();
-        createChildWindow();
+        // createChildWindow();
     } else {
         Object.keys(fin.desktop.Window.getCurrent().contentWindow.store.getState()).forEach((windowName) => {
             const newWindowName = windowName === 'undefined' ? null : windowName;

@@ -81,6 +81,14 @@ export function dragEnd() {
     };
 }
 
+export function reopenWindow(reopenWindowName) {
+    return {
+        windowName: currentWindowService.getCurrentWindow().name,
+        type: ACTION_TYPES.REOPEN_WINDOW,
+        reopenWindowName
+    };
+}
+
 function clearSearch() {
     return {
         windowName: currentWindowService.getCurrentWindow().name,

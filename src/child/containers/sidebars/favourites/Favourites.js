@@ -177,6 +177,7 @@ class Favourites extends Component {
         );
     }
 }
+
 Favourites.propTypes = {
     selection: PropTypes.object,
     favourites: PropTypes.object.isRequired,

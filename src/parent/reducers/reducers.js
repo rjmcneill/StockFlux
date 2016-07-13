@@ -9,6 +9,15 @@ function parentReducer(state = {}, action) {
 
     case ACTION_TYPES.CHILD_CLOSED: {
         const newState = Object.assign({}, state);
+
+        if (newState.closedWindows) {
+            newState.closedWindows[action.windowName] = newState[action.windowName];
+        } else {
+            newState.closedWindows = {
+                [action.windowName]: newState[action.windowName]
+            };
+        }
+
         delete newState[action.windowName];
         return newState;
     }
@@ -23,6 +32,15 @@ function parentReducer(state = {}, action) {
                 windowName: action.windowName
             }
         });
+    }
+
+    case ACTION_TYPES.REOPEN_WINDOW: {
+        const newState = Object.assign({}, state, {
+            [action.reopenWindowName]: state.closedWindows[action.reopenWindowName]
+        });
+
+        delete newState.closedWindows[action.reopenWindowName];
+        return newState;
     }
 
     case ACTION_TYPES.DRAG_END: {
