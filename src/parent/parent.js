@@ -16,7 +16,7 @@ function createChildWindows() {
     // Subscribe to the store so we can avoid having the side effect
     // of closing the parent window in a reducer
     store.subscribe(() => {
-        if (!Object.keys(store.getState()).length) {
+        if (!Object.keys(store.getState().childWindows).length) {
             fin.desktop.Window.getCurrent().contentWindow.close();
         }
     });

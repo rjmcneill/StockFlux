@@ -7,7 +7,11 @@ function parentReducer(state = {}, action) {
 
     case ACTION_TYPES.CLOSE: {
         const newState = Object.assign({}, state);
-        delete newState[action.windowName];
+
+        if (Object.keys(newState.childWindows).length > 1) {
+            delete newState.childWindows[action.windowName];
+        }
+
         return newState;
     }
 
@@ -17,17 +21,17 @@ function parentReducer(state = {}, action) {
         // All child actions are prefaced with 'CHILD'; if the incoming
         // action is for the child, let the child reducers handle the action
         if (subString === 'CHILD') {
-            const childState = state[action.windowName];
+            const childState = state.childWindows ? state.childWindows[action.windowName] : {};
             let newState = {};
 
             if (childState) {
-                newState = Object.assign({}, state, {
-                    [action.windowName]: childReducers(childState, action)
-                });
+                const childWindows = Object.assign({}, state.childWindows);
+                childWindows[action.windowName] = childReducers(childState, action)
+                newState = Object.assign({}, state, { childWindows });
             } else {
-                newState = Object.assign({}, state, {
-                    [action.windowName]: childReducers({}, action)
-                });
+                const childWindows = Object.assign({}, state.childWindows);
+                childWindows[action.windowName] = childReducers({}, action)
+                newState = Object.assign({}, state, { childWindows });
             }
 
             return newState;
