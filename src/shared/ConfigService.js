@@ -45,17 +45,26 @@ class ConfigService {
         return overrides;
     }
 
-    getWindowConfig(name) {
+    getWindowConfig(name, dimensions) {
+        dimensions = dimensions || [];
+        let minDimensions = [];
+
+        if (dimensions === COMPACT_WINDOW_DIMENSIONS) {
+            minDimensions = COMPACT_WINDOW_DIMENSIONS;
+        }
+
+        console.log(dimensions, minDimensions);
+
         return this.getConfig(name, {
             showTaskbarIcon: true,
             saveWindowState: true,
             url: 'index.html',
             resizable: true,
             maximizable: true,
-            minWidth: DEFAULT_WINDOW_MIN_DIMENSIONS[0],
-            minHeight: DEFAULT_WINDOW_MIN_DIMENSIONS[1],
-            defaultWidth: DEFAULT_WINDOW_DIMENSIONS[0],
-            defaultHeight: DEFAULT_WINDOW_DIMENSIONS[1]
+            minWidth: minDimensions[0] || DEFAULT_WINDOW_MIN_DIMENSIONS[0],
+            minHeight: minDimensions[1] || DEFAULT_WINDOW_MIN_DIMENSIONS[1],
+            defaultWidth: dimensions[0] || DEFAULT_WINDOW_DIMENSIONS[0],
+            defaultHeight: dimensions[1] || DEFAULT_WINDOW_DIMENSIONS[1]
         });
     }
 

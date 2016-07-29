@@ -32,11 +32,11 @@ fin.desktop.main(() => {
 
     // Ensure that the window is started in the same
     // state as the previous session, if available
-    if (windowState.isCompact) {
-        store.dispatch(resizeToCompact());
-    } else if (windowState.isMaximised) {
-        fin.desktop.Window.getCurrent().maximize();
-    }
+    // if (windowState.isCompact) {
+    //     store.dispatch(resizeToCompact());
+    // } else if (windowState.isMaximised) {
+    //     fin.desktop.Window.getCurrent().maximize();
+    // }
 
     render(
         <Provider store={store}>
